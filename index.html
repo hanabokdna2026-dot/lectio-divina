@@ -1,0 +1,2743 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>렉시오 디비나 — 말씀과 침묵의 기도</title>
+
+<!-- PWA Meta Tags -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="렉시오 디비나">
+<meta name="theme-color" content="#f7f2e9">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="렉시오 디비나">
+<meta name="description" content="렉시오 디비나 — 말씀과 침묵의 기도">
+
+<!-- PWA Icons (real PNG files for iOS compatibility) -->
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+
+<!-- Inline Web App Manifest -->
+<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22%EB%A0%89%EC%8B%9C%EC%98%A4%20%EB%94%94%EB%B9%84%EB%82%98%22%2C%22short_name%22%3A%22%EB%A0%89%EC%8B%9C%EC%98%A4%22%2C%22description%22%3A%22%EB%A7%90%EC%94%80%EA%B3%BC%20%EC%B9%A8%EB%AC%B5%EC%9D%98%20%EA%B8%B0%EB%8F%84%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%23f7f2e9%22%2C%22theme_color%22%3A%22%23f7f2e9%22%2C%22categories%22%3A%5B%22lifestyle%22%5D%2C%22icons%22%3A%5B%7B%22src%22%3A%22icon-192.png%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%22%7D%2C%7B%22src%22%3A%22icon-512.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+
+<!-- Splash screen styles for iOS -->
+<style id="pwa-splash">
+  html { background: #f7f2e9; }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* warm beige + gold light theme. var names kept for compatibility */
+  --forest-darkest: #5a4a32;
+  --forest-dark: #6b5840;
+  --forest-mid: #8a7350;
+  --forest-light: #a89372;
+  --forest-pale: #c4b393;
+  --forest-mist: #e6dcc8;
+  --bark: #8a7355;
+  --bark-light: #a89372;
+  --gold: #b8985a;
+  --gold-soft: #cdae74;
+  --gold-glow: rgba(184, 152, 90, 0.25);
+  --cream: #f7f2e9;
+  --cream-warm: #efe6d5;
+  --text-dark: #3d3528;
+  --text-body: #5e5444;
+  --text-light: #9a8e78;
+  --shadow-soft: 0 2px 24px rgba(138, 115, 80, 0.10);
+  --shadow-deep: 0 12px 48px rgba(138, 115, 80, 0.16);
+  --radius: 18px;
+  --radius-sm: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--cream);
+  color: var(--text-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* === BACKGROUND (light warm) === */
+.forest-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: linear-gradient(175deg, #f7f2e9 0%, #f3ebdc 40%, #efe6d5 70%, #ede2cf 100%);
+}
+
+.forest-bg::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse 120% 60% at 20% 15%, rgba(205, 174, 116, 0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 90% 50% at 85% 80%, rgba(184, 152, 90, 0.12) 0%, transparent 60%);
+}
+
+.mist {
+  position: absolute;
+  width: 200%;
+  height: 120px;
+  bottom: 0;
+  left: -50%;
+  background: linear-gradient(to top, rgba(247, 242, 233, 0.5), transparent);
+  animation: mist-drift 30s ease-in-out infinite;
+}
+
+.mist:nth-child(2) {
+  bottom: 50px;
+  height: 90px;
+  opacity: 0.4;
+  animation-delay: -15s;
+  animation-duration: 40s;
+}
+
+@keyframes mist-drift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5%); }
+}
+
+/* Soft floating gold dust particles */
+.firefly {
+  position: absolute;
+  width: 5px; height: 5px;
+  background: var(--gold-soft);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--gold-glow);
+  animation: firefly-float 9s ease-in-out infinite;
+  opacity: 0;
+}
+
+@keyframes firefly-float {
+  0%, 100% { opacity: 0; transform: translate(0, 0); }
+  25% { opacity: 0.5; }
+  50% { opacity: 0.3; transform: translate(24px, -36px); }
+  80% { opacity: 0.4; }
+}
+
+/* Tree silhouettes */
+.trees-svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40vh;
+  opacity: 0.3;
+}
+
+/* === MAIN CONTAINER === */
+.app-container {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+/* === HEADER === */
+.header {
+  text-align: center;
+  padding: 40px 20px 30px;
+  animation: fadeInDown 1s ease;
+}
+
+.header h1 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(2rem, 7vw, 2.8rem);
+  font-weight: 600;
+  color: var(--text-dark);
+  letter-spacing: 6px;
+  line-height: 1.3;
+  text-indent: 6px;
+}
+
+.header h1 em {
+  font-style: normal;
+  color: var(--gold);
+  display: block;
+  font-size: 0.3em;
+  font-weight: 300;
+  margin-top: 10px;
+  letter-spacing: 7px;
+  text-indent: 7px;
+}
+
+.header-subtitle {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: var(--text-light);
+  letter-spacing: 3px;
+  margin-top: 12px;
+}
+
+.mode-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.mode-tab {
+  padding: 9px 20px;
+  border: 1px solid var(--forest-mist);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--text-light);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.35s ease;
+}
+
+.mode-tab.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: white;
+  font-weight: 500;
+  box-shadow: 0 3px 12px var(--gold-glow);
+}
+
+/* Leaf divider */
+.leaf-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 18px 0;
+  opacity: 0.6;
+}
+
+.leaf-divider .line {
+  width: 40px;
+  height: 1px;
+  background: var(--gold-soft);
+}
+
+.leaf-divider .leaf {
+  font-size: 12px;
+  color: var(--gold);
+}
+
+/* === CARD === */
+.card {
+  background: rgba(255, 253, 249, 0.92);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(205, 174, 116, 0.18);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-deep);
+  width: 100%;
+  max-width: 520px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  animation: fadeInUp 0.8s ease;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === INTRO SCREEN === */
+.screen { display: none; }
+.screen.active { display: block; }
+
+.intro-content {
+  padding: 36px 30px;
+  text-align: center;
+}
+
+.intro-icon {
+  width: 80px; height: 80px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--forest-dark), var(--forest-mid));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(61, 107, 61, 0.3);
+}
+
+.intro-icon svg {
+  width: 40px; height: 40px;
+  fill: var(--cream);
+}
+
+.intro-content h2 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+}
+
+.intro-content p {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: var(--text-body);
+  margin-bottom: 20px;
+}
+
+/* Bible text input */
+.bible-input-section {
+  margin: 24px 0;
+  text-align: left;
+}
+
+.bible-input-section label {
+  display: block;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--forest-dark);
+  margin-bottom: 8px;
+}
+
+.bible-ref-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid var(--forest-mist);
+  border-radius: var(--radius-sm);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  background: white;
+  transition: border-color 0.3s;
+  outline: none;
+}
+
+.bible-ref-input:focus {
+  border-color: var(--forest-mid);
+}
+
+.btn-bible-search {
+  padding: 0 16px;
+  border: 1.5px solid var(--forest-mid);
+  border-radius: var(--radius-sm);
+  background: var(--forest-mid);
+  color: var(--cream);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-daily-reading {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--gold), var(--bark));
+  color: white;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.25s;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 14px var(--gold-glow);
+}
+
+.btn-daily-reading:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(184, 152, 90, 0.35);
+}
+
+.btn-daily-reading:active {
+  transform: scale(0.98);
+}
+
+/* Bible Picker */
+.bible-picker {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 6px;
+}
+
+.picker-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 11px 6px;
+  border: 1.5px solid var(--gold-soft);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(160deg, #fffdf8, #f7f0e2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.picker-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: var(--forest-mist);
+  background: white;
+}
+
+.picker-btn:not(:disabled):hover {
+  border-color: var(--gold);
+  box-shadow: 0 2px 10px var(--gold-glow);
+}
+
+.picker-label {
+  font-size: 0.68rem;
+  color: var(--bark);
+  letter-spacing: 0.5px;
+}
+
+.picker-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.picker-btn.filled {
+  background: linear-gradient(135deg, var(--gold), var(--bark));
+  border-color: var(--gold);
+  box-shadow: 0 3px 12px var(--gold-glow);
+}
+
+.picker-btn.filled .picker-label {
+  color: rgba(255,255,255,0.85);
+}
+
+.picker-btn.filled .picker-value {
+  color: white;
+}
+
+/* Picker Modal */
+.picker-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(61, 53, 40, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.picker-modal.open {
+  display: flex;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.picker-sheet {
+  background: var(--cream);
+  width: 100%;
+  max-width: 520px;
+  max-height: 70vh;
+  border-radius: 24px 24px 0 0;
+  display: flex;
+  flex-direction: column;
+  animation: slideUpSheet 0.3s ease;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@keyframes slideUpSheet {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.picker-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px 14px;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  border-bottom: 1px solid var(--forest-mist);
+}
+
+.picker-close {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.picker-grid {
+  overflow-y: auto;
+  padding: 16px 18px 24px;
+  display: grid;
+  gap: 8px;
+}
+
+.picker-grid.books { grid-template-columns: repeat(2, 1fr); }
+.picker-grid.numbers { grid-template-columns: repeat(5, 1fr); }
+
+.picker-item {
+  padding: 13px 8px;
+  border: 1px solid var(--forest-mist);
+  border-radius: 10px;
+  background: white;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.picker-item:hover, .picker-item:active {
+  background: var(--forest-mid);
+  color: white;
+  border-color: var(--forest-mid);
+}
+
+.picker-section-label {
+  grid-column: 1 / -1;
+  font-size: 0.75rem;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  padding: 8px 2px 2px;
+  font-weight: 500;
+}
+
+.btn-bible-search:hover {
+  background: var(--forest-dark);
+}
+
+.btn-bible-search:disabled {
+  background: var(--text-light);
+  border-color: var(--text-light);
+  cursor: wait;
+}
+
+.bible-text-input {
+  width: 100%;
+  min-height: 120px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--forest-mist);
+  border-radius: var(--radius-sm);
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-dark);
+  background: white;
+  resize: vertical;
+  transition: border-color 0.3s;
+  outline: none;
+  margin-top: 10px;
+}
+
+.bible-text-input:focus {
+  border-color: var(--forest-mid);
+}
+
+/* Time settings */
+.time-settings {
+  margin: 24px 0 8px;
+  text-align: left;
+}
+
+.time-settings h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--forest-dark);
+  margin-bottom: 14px;
+}
+
+.time-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(168, 197, 160, 0.3);
+}
+
+.time-row:last-child { border-bottom: none; }
+
+.time-label {
+  font-size: 0.85rem;
+  color: var(--text-body);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-label .step-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--forest-mid);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.time-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-btn {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid var(--forest-mist);
+  background: white;
+  color: var(--forest-mid);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.time-btn:hover {
+  background: var(--forest-mid);
+  color: white;
+  border-color: var(--forest-mid);
+}
+
+.time-btn:active { transform: scale(0.92); }
+
+.time-value {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  width: 40px;
+  text-align: center;
+}
+
+/* Start button */
+.bowl-selector, .bowl-scroll-wrap {
+  margin-top: 10px;
+}
+
+.bowl-section-label {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--forest-mid);
+  letter-spacing: 1px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(168, 197, 160, 0.3);
+  margin-bottom: 8px;
+}
+
+.bowl-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0 8px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.bowl-scroll::-webkit-scrollbar { display: none; }
+
+.bowl-option-compact {
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.bowl-option-compact input[type="radio"] {
+  display: none;
+}
+
+.bowl-chip {
+  display: block;
+  padding: 9px 14px;
+  border: 1.5px solid var(--forest-mist);
+  border-radius: 20px;
+  background: white;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.82rem;
+  color: var(--text-body);
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.bowl-option-compact input:checked + .bowl-chip {
+  background: var(--forest-mid);
+  color: var(--cream);
+  border-color: var(--forest-mid);
+  box-shadow: 0 2px 8px rgba(61, 107, 61, 0.25);
+}
+
+.bowl-preview-text-btn {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 4px 0;
+  background: transparent;
+  border: none;
+  color: var(--forest-light);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.bowl-preview-text-btn:hover {
+  color: var(--forest-dark);
+}
+
+.nature-toggle {
+  margin-top: 8px;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--text-body);
+}
+
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--forest-mist);
+  border-radius: 24px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--forest-mid);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+/* Start button */
+.btn-start {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
+  margin-top: 28px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--forest-dark), var(--forest-mid));
+  color: var(--cream);
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(45, 74, 45, 0.3);
+}
+
+.btn-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(45, 74, 45, 0.4);
+}
+
+.btn-start:active { transform: translateY(0); }
+
+/* === ACTIVE SESSION SCREEN === */
+.session-header {
+  padding: 20px 24px 16px;
+  background: linear-gradient(135deg, var(--forest-dark), var(--forest-mid));
+  color: var(--cream);
+}
+
+.progress-bar-container {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.progress-dot {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.2);
+  transition: background 0.5s;
+}
+
+.progress-dot.completed { background: var(--gold); }
+.progress-dot.current {
+  background: var(--gold);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.session-step-name {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 0.75rem;
+  font-weight: 300;
+  letter-spacing: 3px;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.session-step-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.session-body {
+  padding: 28px 24px 32px;
+  text-align: center;
+}
+
+/* Timer Circle */
+.timer-circle-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 24px;
+}
+
+.timer-circle-bg {
+  fill: none;
+  stroke: var(--forest-mist);
+  stroke-width: 3;
+}
+
+.timer-circle-progress {
+  fill: none;
+  stroke: var(--forest-mid);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.timer-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.timer-digits {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 300;
+  color: var(--text-dark);
+  letter-spacing: 2px;
+}
+
+.timer-sub {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-top: 2px;
+}
+
+/* Singing bowl indicator */
+.bowl-indicator {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-size: 0.8rem;
+  color: var(--forest-mid);
+  animation: fadeInUp 0.5s ease;
+}
+
+.bowl-indicator.active { display: flex; }
+
+.bowl-ripple {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: ripple-out 2s ease-out infinite;
+}
+
+@keyframes ripple-out {
+  0% { box-shadow: 0 0 0 0 var(--gold-glow); }
+  100% { box-shadow: 0 0 0 20px transparent; }
+}
+
+/* Guide text */
+.guide-text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1rem;
+  line-height: 2;
+  color: var(--text-body);
+  margin-bottom: 20px;
+  min-height: 80px;
+  white-space: pre-line;
+}
+
+/* Bible display */
+.bible-display {
+  background: rgba(45, 74, 45, 0.04);
+  border-left: 3px solid var(--forest-mid);
+  padding: 18px 20px;
+  margin: 20px 0;
+  text-align: left;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.bible-display .ref {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--forest-mid);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.bible-display .text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.05rem;
+  line-height: 2;
+  color: var(--text-dark);
+}
+
+/* Buttons */
+.session-btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-session {
+  flex: 1;
+  padding: 13px 16px;
+  border-radius: var(--radius-sm);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-next {
+  background: linear-gradient(135deg, var(--forest-dark), var(--forest-mid));
+  color: var(--cream);
+  box-shadow: 0 3px 12px rgba(45, 74, 45, 0.25);
+}
+
+.btn-next:hover { transform: translateY(-1px); }
+
+.btn-pause {
+  background: white;
+  color: var(--forest-dark);
+  border: 1.5px solid var(--forest-mist);
+}
+
+.btn-pause:hover { border-color: var(--forest-mid); }
+
+.btn-bowl {
+  background: linear-gradient(135deg, var(--bark), var(--bark-light));
+  color: var(--cream);
+  box-shadow: 0 3px 12px rgba(107, 78, 61, 0.2);
+}
+
+.btn-bowl:hover { transform: translateY(-1px); }
+
+.btn-back {
+  background: transparent;
+  color: var(--text-light);
+  border: 1px solid rgba(168, 197, 160, 0.4);
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 0.8rem;
+}
+
+.btn-back:hover { background: rgba(168, 197, 160, 0.1); }
+
+/* === COMPLETION SCREEN === */
+.completion-content {
+  padding: 48px 30px;
+  text-align: center;
+}
+
+.completion-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  animation: gentle-float 3s ease-in-out infinite;
+}
+
+@keyframes gentle-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.completion-content h2 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+}
+
+.completion-content p {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: var(--text-body);
+  margin-bottom: 24px;
+}
+
+.completion-blessing {
+  font-family: 'Noto Serif KR', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--forest-dark);
+  line-height: 1.8;
+  padding: 20px;
+  background: rgba(45, 74, 45, 0.04);
+  border-radius: var(--radius-sm);
+  margin-bottom: 28px;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 500px) {
+  .app-container { padding: 12px; }
+  .intro-content, .session-body { padding-left: 20px; padding-right: 20px; }
+  .header { padding: 30px 16px 20px; }
+  .timer-circle-container { width: 170px; height: 170px; }
+  .timer-digits { font-size: 2rem; }
+}
+
+/* Fade transitions */
+.fade-enter {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.fade-exit {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); border: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- Forest Background -->
+<div class="forest-bg">
+  <div class="mist"></div>
+  <div class="mist"></div>
+  <!-- Fireflies generated by JS -->
+  <svg class="trees-svg" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax slice">
+    <path d="M0,400 L0,280 C50,260 80,200 100,180 C110,200 130,250 140,260 L140,280 C160,270 180,220 200,190 C210,210 230,260 250,275 L250,280 C290,260 310,180 340,150 C350,175 380,250 400,270 L400,400Z" fill="rgba(205,174,116,0.28)"/>
+    <path d="M350,400 L350,300 C380,280 400,230 420,200 C430,225 450,270 470,285 L470,290 C500,270 520,210 540,180 C555,200 570,260 590,280 L590,400Z" fill="rgba(196,179,147,0.22)"/>
+    <path d="M550,400 L550,310 C580,290 610,240 630,210 C640,230 660,270 680,290 L680,400Z" fill="rgba(205,174,116,0.25)"/>
+    <path d="M660,400 L660,290 C690,270 720,200 750,170 C760,195 790,260 810,280 L810,300 C830,280 850,230 880,200 C890,220 910,270 930,285 L930,400Z" fill="rgba(196,179,147,0.22)"/>
+    <path d="M880,400 L880,310 C910,290 930,240 960,210 C970,230 1000,280 1020,295 L1020,290 C1050,270 1070,220 1100,190 C1110,210 1130,260 1150,280 L1200,300 L1200,400Z" fill="rgba(205,174,116,0.26)"/>
+  </svg>
+</div>
+
+<!-- App Container -->
+<div class="app-container">
+
+  <!-- Header -->
+  <header class="header">
+    <h1 id="headerTitle">렉시오 디비나<em>LECTIO DIVINA</em></h1>
+    <div class="header-subtitle">말씀과 침묵의 기도</div>
+    <div class="leaf-divider">
+      <span class="line"></span>
+      <span class="leaf">🌿</span>
+      <span class="line"></span>
+    </div>
+    <!-- Mode Tabs -->
+    <div class="mode-tabs">
+      <button class="mode-tab active" id="tab-lectio" onclick="switchMode('lectio')">렉시오 디비나</button>
+      <button class="mode-tab" id="tab-centering" onclick="switchMode('centering')">센터링 프레이어</button>
+    </div>
+  </header>
+
+  <!-- SCREEN: Intro / Settings -->
+  <div class="card screen active" id="screen-intro">
+    <div class="intro-content">
+      <div class="intro-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      </div>
+      <h2>하나님 앞에 고요히</h2>
+      <p>
+        렉시오 디비나는 하나님의 말씀을 천천히 읽고,<br>
+        묵상하며, 기도하고, 관상으로 나아가는<br>
+        거룩한 독서의 여정입니다.
+      </p>
+
+      <div class="bible-input-section">
+        <label>오늘의 성경 본문</label>
+        <button type="button" class="btn-daily-reading" onclick="loadDailyReading()">오늘의 매일성경 불러오기</button>
+
+        <div class="bible-picker">
+          <button type="button" class="picker-btn" id="pickBook" onclick="openPicker('book')">
+            <span class="picker-label">책</span>
+            <span class="picker-value" id="pickBookVal">선택</span>
+          </button>
+          <button type="button" class="picker-btn" id="pickChapter" onclick="openPicker('chapter')" disabled>
+            <span class="picker-label">장</span>
+            <span class="picker-value" id="pickChapterVal">—</span>
+          </button>
+          <button type="button" class="picker-btn" id="pickVerseStart" onclick="openPicker('verseStart')" disabled>
+            <span class="picker-label">시작 절</span>
+            <span class="picker-value" id="pickVerseStartVal">—</span>
+          </button>
+          <button type="button" class="picker-btn" id="pickVerseEnd" onclick="openPicker('verseEnd')" disabled>
+            <span class="picker-label">끝 절</span>
+            <span class="picker-value" id="pickVerseEndVal">—</span>
+          </button>
+        </div>
+
+        <div id="bibleSearchStatus" style="font-size:0.8rem; color:var(--text-light); margin-top:8px; min-height:1.2em;"></div>
+        <textarea class="bible-text-input" id="bibleText" placeholder="위에서 책·장·절을 선택하면 본문이 표시됩니다. 직접 붙여넣어도 됩니다."></textarea>
+        <input type="hidden" id="bibleRef" />
+      </div>
+
+      <!-- Picker Modal -->
+      <div class="time-settings">
+        <h3>🔔 싱잉볼 소리 선택</h3>
+        <div class="bowl-section-label">시작종</div>
+        <div class="bowl-scroll">
+          <label class="bowl-option-compact">
+            <input type="radio" name="startBowl" value="bowl4">
+            <span class="bowl-chip">맑은 울림 (13초)</span>
+          </label>
+          <label class="bowl-option-compact">
+            <input type="radio" name="startBowl" value="bowl2" checked>
+            <span class="bowl-chip">부드러운 울림 (17초)</span>
+          </label>
+          <label class="bowl-option-compact">
+            <input type="radio" name="startBowl" value="bowl1">
+            <span class="bowl-chip">깊은 울림 (43초)</span>
+          </label>
+          <label class="bowl-option-compact">
+            <input type="radio" name="startBowl" value="bowl3">
+            <span class="bowl-chip">풍성한 울림 (50초)</span>
+          </label>
+        </div>
+        <button type="button" class="bowl-preview-text-btn" onclick="previewBowl(getSelectedBowl('startBowl'))">▶ 시작종 미리듣기</button>
+
+        <div class="bowl-section-label" style="margin-top:14px;">마무리종</div>
+        <div class="bowl-scroll">
+          <label class="bowl-option-compact">
+            <input type="radio" name="endBowl" value="bowl4" checked>
+            <span class="bowl-chip">맑은 울림 (13초)</span>
+          </label>
+          <label class="bowl-option-compact">
+            <input type="radio" name="endBowl" value="bowl2">
+            <span class="bowl-chip">부드러운 울림 (17초)</span>
+          </label>
+          <label class="bowl-option-compact">
+            <input type="radio" name="endBowl" value="bowl1">
+            <span class="bowl-chip">깊은 울림 (43초)</span>
+          </label>
+          <label class="bowl-option-compact">
+            <input type="radio" name="endBowl" value="bowl3">
+            <span class="bowl-chip">풍성한 울림 (50초)</span>
+          </label>
+        </div>
+        <button type="button" class="bowl-preview-text-btn" onclick="previewBowl(getSelectedBowl('endBowl'))">▶ 마무리종 미리듣기</button>
+      </div>
+
+      <div class="time-settings">
+        <h3>🍃 배경 자연 소리</h3>
+        <div class="nature-toggle">
+          <label class="toggle-label">
+            <span>타이머 진행 중 자연의 소리 재생</span>
+            <div class="toggle-switch">
+              <input type="checkbox" id="natureToggle" checked>
+              <span class="toggle-slider"></span>
+            </div>
+          </label>
+          <button type="button" class="bowl-preview-text-btn" onclick="previewNature()">▶ 미리듣기</button>
+        </div>
+      </div>
+
+      <div class="time-settings">
+        <h3>⏱ 단계별 시간 설정 (분)</h3>
+        <div class="time-row">
+          <span class="time-label"><span class="step-num">1</span>침묵 (Silentio)</span>
+          <div class="time-control">
+            <button class="time-btn" onclick="adjustTime(0,-1)">−</button>
+            <span class="time-value" id="time-0">1</span>
+            <button class="time-btn" onclick="adjustTime(0,1)">+</button>
+          </div>
+        </div>
+        <div class="time-row">
+          <span class="time-label"><span class="step-num">2</span>읽기 (Lectio)</span>
+          <div class="time-control">
+            <button class="time-btn" onclick="adjustTime(1,-1)">−</button>
+            <span class="time-value" id="time-1">3</span>
+            <button class="time-btn" onclick="adjustTime(1,1)">+</button>
+          </div>
+        </div>
+        <div class="time-row">
+          <span class="time-label"><span class="step-num">3</span>묵상 (Meditatio)</span>
+          <div class="time-control">
+            <button class="time-btn" onclick="adjustTime(2,-1)">−</button>
+            <span class="time-value" id="time-2">3</span>
+            <button class="time-btn" onclick="adjustTime(2,1)">+</button>
+          </div>
+        </div>
+        <div class="time-row">
+          <span class="time-label"><span class="step-num">4</span>기도 (Oratio)</span>
+          <div class="time-control">
+            <button class="time-btn" onclick="adjustTime(3,-1)">−</button>
+            <span class="time-value" id="time-3">3</span>
+            <button class="time-btn" onclick="adjustTime(3,1)">+</button>
+          </div>
+        </div>
+        <div class="time-row">
+          <span class="time-label"><span class="step-num">5</span>관상 (Contemplatio)</span>
+          <div class="time-control">
+            <button class="time-btn" onclick="adjustTime(4,-1)">−</button>
+            <span class="time-value" id="time-4">3</span>
+            <button class="time-btn" onclick="adjustTime(4,1)">+</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-start" onclick="startSession()">
+        🌿 시작하기
+      </button>
+    </div>
+  </div>
+
+  <!-- SCREEN: Active Session -->
+  <div class="card screen" id="screen-session">
+    <div class="session-header">
+      <div class="progress-bar-container" id="progressBar"></div>
+      <div class="session-step-name" id="stepLatin"></div>
+      <div class="session-step-title" id="stepTitle"></div>
+    </div>
+    <div class="session-body">
+      <div class="bowl-indicator" id="bowlIndicator">
+        <div class="bowl-ripple"></div>
+        <span>싱잉볼 울림</span>
+      </div>
+
+      <div class="timer-circle-container">
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <circle class="timer-circle-bg" cx="100" cy="100" r="88"/>
+          <circle class="timer-circle-progress" id="timerProgress" cx="100" cy="100" r="88"
+            stroke-dasharray="553" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-text">
+          <div class="timer-digits" id="timerDigits">0:00</div>
+          <div class="timer-sub" id="timerSub">남은 시간</div>
+        </div>
+      </div>
+
+      <div class="guide-text" id="guideText"></div>
+
+      <div class="bible-display" id="bibleDisplay" style="display:none;">
+        <div class="ref" id="displayRef"></div>
+        <div class="text" id="displayText"></div>
+      </div>
+
+      <div class="session-btn-row">
+        <button class="btn-session btn-pause" id="btnPause" onclick="togglePause()">일시정지</button>
+        <button class="btn-session btn-bowl" onclick="playStartBowl()">🔔 싱잉볼</button>
+        <button class="btn-session btn-next" id="btnNext" onclick="nextStep()">다음 단계 →</button>
+      </div>
+      <button class="btn-session btn-back" onclick="backToIntro()">← 처음으로 돌아가기</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: Completion -->
+  <div class="card screen" id="screen-complete">
+    <div class="completion-content">
+      <div class="completion-icon">🕊️</div>
+      <h2>렉시오 디비나를 마칩니다</h2>
+      <p>
+        하나님의 말씀 안에 거하신 시간이<br>
+        오늘 하루를 은혜로 채워가길 기도합니다.
+      </p>
+      <div class="completion-blessing">
+        "여호와는 나의 목자시니 내게 부족함이 없으리로다.<br>
+        그가 나를 푸른 풀밭에 누이시며<br>
+        쉴 만한 물 가로 인도하시는도다."<br>
+        <span style="font-size:0.8em; color:var(--text-light);">— 시편 23:1-2</span>
+      </div>
+      <button class="btn-start" onclick="backToIntro()">🌿 다시 시작하기</button>
+    </div>
+  </div>
+
+  <!-- ============ CENTERING PRAYER SCREENS ============ -->
+
+  <!-- SCREEN: Centering Prayer Intro -->
+  <div class="card screen" id="screen-cp-intro">
+    <div class="intro-content">
+      <div class="intro-icon" style="background: linear-gradient(135deg, var(--bark), var(--bark-light));">
+        <svg viewBox="0 0 24 24" style="fill:var(--cream);width:36px;height:36px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+      </div>
+      <h2>센터링 프레이어</h2>
+      <p style="font-size:0.88rem; line-height:1.8; text-align:left; margin-bottom:16px;">
+        센터링 프레이어는 하나님의 현존에<br>
+        마음을 열고 동의하는 침묵 기도입니다.
+      </p>
+      <div style="background:rgba(45,74,45,0.04); border-radius:var(--radius-sm); padding:16px; text-align:left; margin-bottom:20px; font-size:0.85rem; line-height:1.9; color:var(--text-body);">
+        <strong style="color:var(--forest-dark);">기도 방법</strong><br>
+        1. 하나님의 현존에 대한 동의를 상징하는<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;거룩한 단어를 선택합니다.<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--text-light);">예: 주님, 예수, 아바, 사랑, 평안, 은혜</span><br>
+        2. 눈을 감고 거룩한 단어를 마음속으로<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;조용히 되뇌며 하나님께 마음을 엽니다.<br>
+        3. 생각이 떠오르면 알아차리고,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;부드럽게 놓아주며 거룩한 단어로 돌아옵니다.<br>
+        4. 기도가 끝나면 눈을 감은 채<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;1~2분간 천천히 일상으로 돌아옵니다.
+      </div>
+
+      <div class="time-settings">
+        <h3>🔔 싱잉볼 소리 선택</h3>
+        <div class="bowl-section-label">시작종</div>
+        <div class="bowl-scroll">
+          <label class="bowl-option-compact"><input type="radio" name="cpStartBowl" value="bowl4"><span class="bowl-chip">맑은 울림 (13초)</span></label>
+          <label class="bowl-option-compact"><input type="radio" name="cpStartBowl" value="bowl2" checked><span class="bowl-chip">부드러운 울림 (17초)</span></label>
+          <label class="bowl-option-compact"><input type="radio" name="cpStartBowl" value="bowl1"><span class="bowl-chip">깊은 울림 (43초)</span></label>
+          <label class="bowl-option-compact"><input type="radio" name="cpStartBowl" value="bowl3"><span class="bowl-chip">풍성한 울림 (50초)</span></label>
+        </div>
+        <button type="button" class="bowl-preview-text-btn" onclick="previewBowl(getSelectedBowl('cpStartBowl'))">▶ 시작종 미리듣기</button>
+
+        <div class="bowl-section-label" style="margin-top:14px;">마무리종</div>
+        <div class="bowl-scroll">
+          <label class="bowl-option-compact"><input type="radio" name="cpEndBowl" value="bowl4" checked><span class="bowl-chip">맑은 울림 (13초)</span></label>
+          <label class="bowl-option-compact"><input type="radio" name="cpEndBowl" value="bowl2"><span class="bowl-chip">부드러운 울림 (17초)</span></label>
+          <label class="bowl-option-compact"><input type="radio" name="cpEndBowl" value="bowl1"><span class="bowl-chip">깊은 울림 (43초)</span></label>
+          <label class="bowl-option-compact"><input type="radio" name="cpEndBowl" value="bowl3"><span class="bowl-chip">풍성한 울림 (50초)</span></label>
+        </div>
+        <button type="button" class="bowl-preview-text-btn" onclick="previewBowl(getSelectedBowl('cpEndBowl'))">▶ 마무리종 미리듣기</button>
+      </div>
+
+      <div class="time-settings">
+        <h3>🍃 배경 자연 소리</h3>
+        <div class="nature-toggle">
+          <label class="toggle-label">
+            <span>침묵 기도 중 자연의 소리 재생</span>
+            <div class="toggle-switch">
+              <input type="checkbox" id="cpNatureToggle" checked>
+              <span class="toggle-slider"></span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="time-settings">
+        <h3>⏱ 기도 시간 설정 (분)</h3>
+        <div class="time-row">
+          <span class="time-label">침묵 기도 시간</span>
+          <div class="time-control">
+            <button class="time-btn" onclick="adjustCpTime(-1)">−</button>
+            <span class="time-value" id="cp-time">20</span>
+            <button class="time-btn" onclick="adjustCpTime(1)">+</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-start" onclick="startCentering()">🕊️ 시작하기</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: Centering Prayer Session -->
+  <div class="card screen" id="screen-cp-session">
+    <div class="session-header">
+      <div class="session-step-name">CENTERING PRAYER</div>
+      <div class="session-step-title">센터링 프레이어</div>
+    </div>
+    <div class="session-body">
+      <div class="bowl-indicator" id="cpBowlIndicator">
+        <div class="bowl-ripple"></div>
+        <span>싱잉볼 울림</span>
+      </div>
+
+      <div class="timer-circle-container">
+        <svg viewBox="0 0 200 200" width="100%" height="100%">
+          <circle class="timer-circle-bg" cx="100" cy="100" r="88"/>
+          <circle class="timer-circle-progress" id="cpTimerProgress" cx="100" cy="100" r="88"
+            stroke-dasharray="553" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-text">
+          <div class="timer-digits" id="cpTimerDigits">20:00</div>
+          <div class="timer-sub">남은 시간</div>
+        </div>
+      </div>
+
+      <div class="guide-text" id="cpGuideText">
+        생각이 떠오르면 알아차리고,
+부드럽게 놓아주며
+거룩한 단어로 돌아옵니다.
+      </div>
+
+      <div class="session-btn-row">
+        <button class="btn-session btn-pause" id="cpBtnPause" onclick="toggleCpPause()">일시정지</button>
+        <button class="btn-session btn-bowl" onclick="playCpStartBowl()">🔔 싱잉볼</button>
+      </div>
+      <button class="btn-session btn-back" onclick="backToIntro()">← 처음으로 돌아가기</button>
+    </div>
+  </div>
+
+  <!-- SCREEN: Centering Prayer Completion -->
+  <div class="card screen" id="screen-cp-complete">
+    <div class="completion-content">
+      <div class="completion-icon">🕊️</div>
+      <h2>센터링 프레이어를 마칩니다</h2>
+      <p>
+        하나님의 현존 안에 머무신 시간이<br>
+        오늘 하루를 평안으로 채워가길 기도합니다.
+      </p>
+      <div class="completion-blessing">
+        "가만히 있어 내가 하나님 됨을 알지어다."<br>
+        <span style="font-size:0.8em; color:var(--text-light);">— 시편 46:10</span>
+      </div>
+      <button class="btn-start" onclick="backToIntro()">🕊️ 다시 시작하기</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Picker Modal (body-level for proper fixed positioning) -->
+<div class="picker-modal" id="pickerModal" onclick="closePickerOnBg(event)">
+  <div class="picker-sheet">
+    <div class="picker-sheet-header">
+      <span id="pickerTitle">선택</span>
+      <button type="button" class="picker-close" onclick="closePicker()">✕</button>
+    </div>
+    <div class="picker-grid" id="pickerGrid"></div>
+  </div>
+</div>
+
+<script>
+// ========== NATURE SOUND ==========
+const natureAudio = new Audio('nature.mp3');
+natureAudio.loop = true;
+natureAudio.volume = 0.3;
+natureAudio.preload = 'auto';
+
+function isNatureEnabled() {
+  const toggle = document.getElementById('natureToggle');
+  return toggle && toggle.checked;
+}
+
+function startNature() {
+  if (!isNatureEnabled()) return;
+  natureAudio.currentTime = 0;
+  natureAudio.volume = 0.3;
+  natureAudio.play().catch(() => {});
+}
+
+function stopNature() {
+  natureAudio.pause();
+  natureAudio.currentTime = 0;
+}
+
+function fadeOutNature(durationMs) {
+  if (natureAudio.paused) return;
+  const steps = 20;
+  const stepTime = durationMs / steps;
+  const volStep = natureAudio.volume / steps;
+  let count = 0;
+  const fade = setInterval(() => {
+    count++;
+    natureAudio.volume = Math.max(0, natureAudio.volume - volStep);
+    if (count >= steps) {
+      clearInterval(fade);
+      natureAudio.pause();
+      natureAudio.currentTime = 0;
+      natureAudio.volume = 0.3;
+    }
+  }, stepTime);
+}
+
+function previewNature() {
+  unlockAudio();
+  if (!natureAudio.paused) {
+    natureAudio.pause();
+    natureAudio.currentTime = 0;
+    return;
+  }
+  natureAudio.currentTime = 0;
+  natureAudio.volume = 0.3;
+  natureAudio.play().catch(() => {});
+  // Stop after 5 seconds
+  setTimeout(() => {
+    if (!natureAudio.paused) {
+      fadeOutNature(1000);
+    }
+  }, 5000);
+}
+
+// ========== DAILY READING (매일성경 2026) ==========
+let dailySchedule = null;
+
+async function loadDailySchedule() {
+  if (dailySchedule) return dailySchedule;
+  try {
+    const resp = await fetch('daily-reading.json');
+    dailySchedule = await resp.json();
+    return dailySchedule;
+  } catch(e) {
+    console.log('Daily reading schedule load failed:', e);
+    return null;
+  }
+}
+
+async function loadDailyReading() {
+  const status = document.getElementById('bibleSearchStatus');
+  status.textContent = '매일성경 본문을 불러오는 중...';
+  status.style.color = 'var(--text-light)';
+
+  const schedule = await loadDailySchedule();
+  if (!schedule) {
+    status.textContent = '매일성경 데이터를 불러올 수 없습니다.';
+    status.style.color = 'var(--bark)';
+    return;
+  }
+
+  const now = new Date();
+  const key = `${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  const ref = schedule[key];
+
+  if (!ref) {
+    status.textContent = `오늘(${key}) 본문을 찾을 수 없습니다.`;
+    status.style.color = 'var(--bark)';
+    return;
+  }
+
+  // Put reference in input and trigger search
+  document.getElementById('bibleRef').value = ref;
+  status.textContent = `오늘의 매일성경: ${ref}`;
+  status.style.color = 'var(--gold)';
+
+  // Sync picker buttons
+  syncPickerFromRef(ref);
+
+  // Auto search
+  await searchBible();
+}
+
+// ========== BIBLE PICKER (book/chapter/verse buttons) ==========
+const BIBLE_META = [{"n":"창세기","v":[31,25,24,26,32,22,24,22,29,32,32,20,18,24,21,16,27,33,38,18,34,24,20,67,34,35,46,22,35,31,55,32,19,31,29,43,36,30,23,23,57,38,34,34,28,34,31,22,33,26]},{"n":"출애굽기","v":[21,25,22,31,23,30,25,32,35,29,10,51,22,31,27,36,16,27,25,26,36,31,33,18,40,37,21,43,46,38,18,35,23,35,35,38,29,31,43,38]},{"n":"레위기","v":[17,16,17,35,19,30,38,36,24,20,47,8,59,57,33,34,16,30,37,27,24,33,44,23,55,46,34]},{"n":"민수기","v":[54,34,51,49,31,27,89,26,23,34,35,16,33,45,41,50,13,32,22,29,35,41,30,25,18,65,22,31,40,16,54,42,56,29,34,13]},{"n":"신명기","v":[46,37,29,49,33,25,26,20,29,22,32,32,18,29,23,22,20,22,21,20,23,29,25,22,19,19,26,68,29,20,30,52,29,12]},{"n":"여호수아","v":[18,24,17,24,15,27,26,35,27,41,23,24,33,15,62,10,18,28,51,9,45,34,16,33]},{"n":"사사기","v":[36,23,31,24,31,40,25,35,56,18,40,15,25,20,20,31,13,31,30,48,25]},{"n":"룻기","v":[22,23,18,22]},{"n":"사무엘상","v":[28,36,21,22,12,21,16,22,27,27,15,25,23,52,35,23,57,30,24,42,15,23,29,22,44,25,12,25,11,30,13]},{"n":"사무엘하","v":[27,32,39,12,25,23,29,18,13,19,27,31,39,33,37,23,29,33,43,26,22,51,39,25]},{"n":"열왕기상","v":[52,46,28,34,18,38,51,66,28,29,43,33,34,31,34,34,24,46,21,43,29,52]},{"n":"열왕기하","v":[18,25,27,44,27,33,20,29,37,36,21,21,25,29,38,20,41,37,37,21,26,20,37,20,30]},{"n":"역대상","v":[54,54,24,43,26,81,40,40,44,14,47,40,14,17,29,43,27,17,19,8,30,19,32,31,31,32,34,21,30]},{"n":"역대하","v":[17,18,17,22,14,42,21,18,31,19,23,16,22,15,19,14,19,34,11,37,20,12,21,27,28,23,9,27,36,27,21,33,25,33,27,23]},{"n":"에스라","v":[11,70,13,24,17,22,28,36,15,44]},{"n":"느헤미야","v":[11,20,32,23,19,19,73,18,38,39,36,47,31]},{"n":"에스더","v":[22,23,15,14,14,14,10,17,32,3]},{"n":"욥기","v":[22,13,26,21,27,30,21,22,35,22,20,25,28,22,35,22,16,21,29,29,34,30,17,25,6,14,23,28,25,31,40,22,33,37,16,24,24,30,24,24,17,0]},{"n":"시편","v":[6,12,8,8,12,10,17,8,20,18,7,8,6,7,5,9,15,50,14,9,13,31,6,10,22,12,14,9,11,12,24,11,22,22,28,11,40,20,13,17,13,11,5,26,17,11,9,14,20,23,19,9,6,7,23,13,11,11,17,12,8,12,11,10,13,20,7,35,36,5,24,19,28,23,9,12,20,72,13,18,16,8,18,12,13,17,7,18,52,17,16,13,5,23,11,13,12,9,9,5,8,28,22,34,45,48,43,13,31,7,10,10,9,8,18,19,2,9,176,7,8,9,4,8,5,6,5,6,8,8,3,18,3,3,21,26,9,8,24,13,10,7,12,15,21,10,20,14,9,6]},{"n":"잠언","v":[33,22,35,27,23,35,27,36,18,30,30,28,24,35,33,33,28,24,29,30,31,29,35,34,28,28,27,28,27,33,31]},{"n":"전도서","v":[18,26,22,16,19,12,29,17,18,20,10,14]},{"n":"아가","v":[17,17,11,16,16,13,13,14]},{"n":"이사야","v":[31,22,26,6,30,13,25,22,21,34,16,6,21,32,9,14,14,7,25,6,17,25,18,23,12,21,13,29,24,33,9,19,24,17,10,22,36,22,8,31,29,25,28,28,25,13,15,22,26,11,23,15,12,17,13,12,21,14,21,22,11,12,19,12,25,24]},{"n":"예레미야","v":[18,37,25,31,31,30,34,22,26,25,23,17,27,22,21,21,27,23,15,18,14,30,40,10,38,24,22,17,32,24,40,44,26,22,19,32,21,28,18,16,18,22,13,30,5,28,7,47,39,46,63,33]},{"n":"예레미야애가","v":[22,22,66,22,22]},{"n":"에스겔","v":[28,10,27,17,17,14,27,18,11,22,25,28,23,23,8,63,24,32,14,49,32,31,49,27,17,21,36,26,21,26,18,32,33,31,15,38,28,23,29,49,26,20,27,31,25,24,23,35]},{"n":"다니엘","v":[21,49,30,37,31,28,28,27,27,21,45,13]},{"n":"호세아","v":[11,23,5,19,15,11,16,14,17,15,12,14,16,9]},{"n":"요엘","v":[20,32,21]},{"n":"아모스","v":[15,16,15,13,27,14,17,14,15]},{"n":"오바댜","v":[21]},{"n":"요나","v":[17,10,10,11]},{"n":"미가","v":[16,13,12,13,15,16,20]},{"n":"나훔","v":[15,13,19]},{"n":"하박국","v":[17,20,19]},{"n":"스바냐","v":[18,15,20]},{"n":"학개","v":[15,23]},{"n":"스가랴","v":[21,13,10,14,11,15,14,23,17,12,17,14,9,21]},{"n":"말라기","v":[14,17,18,6]},{"n":"마태복음","v":[25,23,17,25,48,34,29,34,38,42,30,50,58,36,39,28,27,35,30,34,46,46,39,51,46,75,66,20]},{"n":"마가복음","v":[45,28,35,41,43,56,37,38,50,52,33,44,37,72,47,20]},{"n":"누가복음","v":[80,52,38,44,39,49,50,56,62,42,54,59,35,35,32,31,37,43,48,47,38,71,56,53]},{"n":"요한복음","v":[51,25,36,54,47,71,53,59,41,42,57,50,38,31,27,33,26,40,42,31,25]},{"n":"사도행전","v":[26,47,26,37,42,15,60,40,43,48,30,25,52,28,41,40,34,28,41,38,40,30,34,27,27,32,44,31]},{"n":"로마서","v":[32,29,31,25,21,23,25,39,33,21,36,21,14,23,33,27]},{"n":"고린도전서","v":[31,16,23,21,13,20,40,13,27,33,34,31,13,40,58,24]},{"n":"고린도후서","v":[24,17,18,18,21,18,16,24,15,18,33,21,13]},{"n":"갈라디아서","v":[24,21,29,31,26,18]},{"n":"에베소서","v":[23,22,21,32,33,24]},{"n":"빌립보서","v":[30,30,21,23]},{"n":"골로새서","v":[29,23,25,9]},{"n":"데살로니가전서","v":[10,20,13,18,28]},{"n":"데살로니가후서","v":[12,17,18]},{"n":"디모데전서","v":[20,15,16,16,25,21]},{"n":"디모데후서","v":[18,26,17,21]},{"n":"디도서","v":[16,15,15]},{"n":"빌레몬서","v":[25]},{"n":"히브리서","v":[14,18,19,16,14,20,28,13,28,39,40,29,25]},{"n":"야고보서","v":[27,26,18,17,20]},{"n":"베드로전서","v":[25,22,19,14,0]},{"n":"베드로후서","v":[21,22,18]},{"n":"요한1서","v":[10,29,24,21,21]},{"n":"요한2서","v":[13]},{"n":"요한3서","v":[14]},{"n":"유다서","v":[25]},{"n":"요한계시록","v":[20,29,22,11,14,17,17,13,21,11,19,17,18,20,8,21,18,24,21,15,27,21]}];
+
+// Old Testament has 39 books, New Testament 27
+const OT_COUNT = 39;
+
+let pickerState = { book: null, chapter: null, verseStart: null, verseEnd: null };
+let activePicker = null;
+
+function openPicker(type) {
+  activePicker = type;
+  const modal = document.getElementById('pickerModal');
+  const grid = document.getElementById('pickerGrid');
+  const title = document.getElementById('pickerTitle');
+  grid.innerHTML = '';
+
+  if (type === 'book') {
+    title.textContent = '책 선택';
+    grid.className = 'picker-grid books';
+    // OT label
+    const otLabel = document.createElement('div');
+    otLabel.className = 'picker-section-label';
+    otLabel.textContent = '구약';
+    grid.appendChild(otLabel);
+    BIBLE_META.forEach((b, i) => {
+      if (i === OT_COUNT) {
+        const ntLabel = document.createElement('div');
+        ntLabel.className = 'picker-section-label';
+        ntLabel.textContent = '신약';
+        grid.appendChild(ntLabel);
+      }
+      const item = document.createElement('button');
+      item.className = 'picker-item';
+      item.textContent = b.n;
+      item.onclick = () => selectBook(i);
+      grid.appendChild(item);
+    });
+  } else if (type === 'chapter') {
+    title.textContent = pickerState.book.n + ' — 장 선택';
+    grid.className = 'picker-grid numbers';
+    const numCh = pickerState.book.v.length;
+    for (let c = 1; c <= numCh; c++) {
+      const item = document.createElement('button');
+      item.className = 'picker-item';
+      item.textContent = c;
+      item.onclick = () => selectChapter(c);
+      grid.appendChild(item);
+    }
+  } else if (type === 'verseStart' || type === 'verseEnd') {
+    const numV = pickerState.book.v[pickerState.chapter - 1];
+    title.textContent = pickerState.book.n + ' ' + pickerState.chapter + '장 — ' + (type === 'verseStart' ? '시작 절' : '끝 절') + ' 선택';
+    grid.className = 'picker-grid numbers';
+    let from = 1;
+    if (type === 'verseEnd' && pickerState.verseStart) from = pickerState.verseStart;
+    for (let v = from; v <= numV; v++) {
+      const item = document.createElement('button');
+      item.className = 'picker-item';
+      item.textContent = v;
+      item.onclick = () => selectVerse(type, v);
+      grid.appendChild(item);
+    }
+  }
+
+  modal.classList.add('open');
+}
+
+function closePicker() {
+  document.getElementById('pickerModal').classList.remove('open');
+}
+
+function closePickerOnBg(e) {
+  if (e.target.id === 'pickerModal') closePicker();
+}
+
+function selectBook(idx) {
+  pickerState.book = BIBLE_META[idx];
+  pickerState.chapter = null;
+  pickerState.verseStart = null;
+  pickerState.verseEnd = null;
+  updatePickerButtons();
+  document.getElementById('pickChapter').disabled = false;
+  document.getElementById('pickVerseStart').disabled = true;
+  document.getElementById('pickVerseEnd').disabled = true;
+  closePicker();
+  setTimeout(() => openPicker('chapter'), 200);
+}
+
+function selectChapter(c) {
+  pickerState.chapter = c;
+  pickerState.verseStart = null;
+  pickerState.verseEnd = null;
+  updatePickerButtons();
+  document.getElementById('pickVerseStart').disabled = false;
+  document.getElementById('pickVerseEnd').disabled = true;
+  closePicker();
+  setTimeout(() => openPicker('verseStart'), 200);
+}
+
+function selectVerse(type, v) {
+  if (type === 'verseStart') {
+    pickerState.verseStart = v;
+    // reset end if now invalid
+    if (pickerState.verseEnd && pickerState.verseEnd < v) pickerState.verseEnd = null;
+    document.getElementById('pickVerseEnd').disabled = false;
+    updatePickerButtons();
+    closePicker();
+    setTimeout(() => openPicker('verseEnd'), 200);
+  } else {
+    pickerState.verseEnd = v;
+    updatePickerButtons();
+    closePicker();
+    applyPickerSelection();
+  }
+}
+
+function updatePickerButtons() {
+  const bookBtn = document.getElementById('pickBook');
+  const chBtn = document.getElementById('pickChapter');
+  const vsBtn = document.getElementById('pickVerseStart');
+  const veBtn = document.getElementById('pickVerseEnd');
+
+  document.getElementById('pickBookVal').textContent = pickerState.book ? pickerState.book.n : '선택';
+  document.getElementById('pickChapterVal').textContent = pickerState.chapter || '—';
+  document.getElementById('pickVerseStartVal').textContent = pickerState.verseStart || '—';
+  document.getElementById('pickVerseEndVal').textContent = pickerState.verseEnd || '—';
+
+  bookBtn.classList.toggle('filled', !!pickerState.book);
+  chBtn.classList.toggle('filled', !!pickerState.chapter);
+  vsBtn.classList.toggle('filled', !!pickerState.verseStart);
+  veBtn.classList.toggle('filled', !!pickerState.verseEnd);
+}
+
+function applyPickerSelection() {
+  if (!pickerState.book || !pickerState.chapter || !pickerState.verseStart) return;
+  const end = pickerState.verseEnd || pickerState.verseStart;
+  const ref = pickerState.book.n + ' ' + pickerState.chapter + ':' + pickerState.verseStart + '-' + end;
+  document.getElementById('bibleRef').value = ref;
+  searchBible();
+}
+
+// Sync picker buttons from a ref string (used by daily reading)
+function syncPickerFromRef(refStr) {
+  const parsed = parseBibleRef(refStr);
+  if (!parsed) return;
+  const bookMeta = BIBLE_META.find(b => b.n === parsed.bookName);
+  if (!bookMeta) return;
+  pickerState.book = bookMeta;
+  pickerState.chapter = parsed.chapter;
+  pickerState.verseStart = parsed.startVerse;
+  pickerState.verseEnd = parsed.crossChapter ? null : parsed.endVerse;
+  document.getElementById('pickChapter').disabled = false;
+  document.getElementById('pickVerseStart').disabled = false;
+  document.getElementById('pickVerseEnd').disabled = false;
+  updatePickerButtons();
+}
+
+// ========== BIBLE SEARCH ==========
+let bibleData = null;
+let bibleLoading = false;
+
+async function loadBible() {
+  if (bibleData) return bibleData;
+  if (bibleLoading) return null;
+  bibleLoading = true;
+  try {
+    const resp = await fetch('bible.json');
+    bibleData = await resp.json();
+    bibleLoading = false;
+    return bibleData;
+  } catch(e) {
+    bibleLoading = false;
+    console.log('Bible data load failed:', e);
+    return null;
+  }
+}
+
+// Preload bible data
+loadBible();
+
+function parseBibleRef(input) {
+  input = input.trim();
+  
+  const aliases = {
+    '창':'창세기','출':'출애굽기','레':'레위기','민':'민수기','신':'신명기',
+    '수':'여호수아','삿':'사사기','룻':'룻기','삼상':'사무엘상','삼하':'사무엘하',
+    '왕상':'열왕기상','왕하':'열왕기하','대상':'역대상','대하':'역대하',
+    '스':'에스라','느':'느헤미야','에':'에스더','욥':'욥기',
+    '시':'시편','잠':'잠언','전':'전도서','아':'아가',
+    '사':'이사야','렘':'예레미야','애':'예레미야애가','겔':'에스겔','단':'다니엘',
+    '호':'호세아','욜':'요엘','암':'아모스','옵':'오바댜','욘':'요나',
+    '미':'미가','나':'나훔','합':'하박국','습':'스바냐','학':'학개','슥':'스가랴','말':'말라기',
+    '마':'마태복음','막':'마가복음','눅':'누가복음','요':'요한복음',
+    '행':'사도행전','롬':'로마서','고전':'고린도전서','고후':'고린도후서',
+    '갈':'갈라디아서','엡':'에베소서','빌':'빌립보서','골':'골로새서',
+    '살전':'데살로니가전서','살후':'데살로니가후서','딤전':'디모데전서','딤후':'디모데후서',
+    '딛':'디도서','몬':'빌레몬서','히':'히브리서',
+    '약':'야고보서','벧전':'베드로전서','벧후':'베드로후서',
+    '요일':'요한1서','요이':'요한2서','요삼':'요한3서','유':'유다서','계':'요한계시록'
+  };
+
+  function resolveBook(name) {
+    name = name.trim();
+    return aliases[name] || name;
+  }
+
+  // Pattern 1: Cross-chapter "창 11:31-12:9" or "창 26:34-27:14"
+  const crossMatch = input.match(/^(.+?)\s*(\d+)\s*:\s*(\d+)\s*-\s*(\d+)\s*:\s*(\d+)$/);
+  if (crossMatch) {
+    return {
+      bookName: resolveBook(crossMatch[1]),
+      chapter: parseInt(crossMatch[2]),
+      startVerse: parseInt(crossMatch[3]),
+      endChapter: parseInt(crossMatch[4]),
+      endVerse: parseInt(crossMatch[5]),
+      crossChapter: true
+    };
+  }
+
+  // Pattern 2: Same chapter "시편 23:1-6" or "요 3:16"
+  const match = input.match(/^(.+?)\s*(\d+)\s*:\s*(\d+)\s*(?:-\s*(\d+))?$/);
+  if (!match) return null;
+
+  return {
+    bookName: resolveBook(match[1]),
+    chapter: parseInt(match[2]),
+    startVerse: parseInt(match[3]),
+    endVerse: match[4] ? parseInt(match[4]) : parseInt(match[3]),
+    crossChapter: false
+  };
+}
+
+async function searchBible() {
+  const input = document.getElementById('bibleRef').value;
+  const status = document.getElementById('bibleSearchStatus');
+
+  if (!input.trim()) {
+    return;
+  }
+
+  const ref = parseBibleRef(input);
+  if (!ref) {
+    status.textContent = '구절 형식을 인식할 수 없습니다.';
+    status.style.color = 'var(--bark)';
+    return;
+  }
+
+  status.textContent = '성경 본문을 불러오는 중...';
+  status.style.color = 'var(--text-light)';
+
+  const bible = await loadBible();
+
+  if (!bible) {
+    status.textContent = '성경 데이터를 불러올 수 없습니다.';
+    status.style.color = 'var(--bark)';
+    return;
+  }
+
+  // Find book
+  const book = bible.find(b => b.n === ref.bookName);
+  if (!book) {
+    status.textContent = `"${ref.bookName}"을(를) 찾을 수 없습니다.`;
+    status.style.color = 'var(--bark)';
+    return;
+  }
+
+  const verses = [];
+  let displayRef = '';
+
+  if (ref.crossChapter) {
+    // Cross-chapter: e.g. 창 11:31-12:9
+    for (let ch = ref.chapter; ch <= ref.endChapter; ch++) {
+      if (ch < 1 || ch > book.c.length) continue;
+      const chVerses = book.c[ch - 1];
+      const startV = (ch === ref.chapter) ? ref.startVerse : 1;
+      const endV = (ch === ref.endChapter) ? Math.min(ref.endVerse, chVerses.length) : chVerses.length;
+      for (let v = startV; v <= endV; v++) {
+        if (chVerses[v-1]) verses.push(`[${ch}:${v}] ${chVerses[v-1]}`);
+      }
+    }
+    displayRef = `${book.n} ${ref.chapter}:${ref.startVerse}-${ref.endChapter}:${ref.endVerse}`;
+  } else {
+    // Same chapter
+    if (ref.chapter < 1 || ref.chapter > book.c.length) {
+      status.textContent = `${book.n}은(는) ${book.c.length}장까지 있습니다.`;
+      status.style.color = 'var(--bark)';
+      return;
+    }
+    const chapterVerses = book.c[ref.chapter - 1];
+    const maxVerse = chapterVerses.length;
+    const start = Math.max(1, ref.startVerse);
+    const end = Math.min(maxVerse, ref.endVerse);
+    if (start > maxVerse) {
+      status.textContent = `${book.n} ${ref.chapter}장은 ${maxVerse}절까지 있습니다.`;
+      status.style.color = 'var(--bark)';
+      return;
+    }
+    for (let v = start; v <= end; v++) {
+      verses.push(`${v} ${chapterVerses[v - 1]}`);
+    }
+    const rangeStr = start === end ? `${start}` : `${start}-${end}`;
+    displayRef = `${book.n} ${ref.chapter}:${rangeStr}`;
+  }
+
+  document.getElementById('bibleRef').value = displayRef;
+  document.getElementById('bibleText').value = verses.join('\n');
+  status.textContent = `✓ ${displayRef} (개역한글)`;
+  status.style.color = 'var(--forest-mid)';
+}
+
+// Allow Enter key in ref input
+document.addEventListener('DOMContentLoaded', () => {
+  const refInput = document.getElementById('bibleRef');
+  if (refInput) {
+    refInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        searchBible();
+      }
+    });
+  }
+});
+
+// ========== SINGING BOWL AUDIO ==========
+const bowlDurations = { bowl1: 43, bowl2: 17, bowl3: 50, bowl4: 13 };
+
+// Pre-load all 4 Audio objects (mobile requires user-initiated unlock)
+const bowlAudioPool = {
+  bowl1: new Audio('bowl1.mp3'),
+  bowl2: new Audio('bowl2.mp3'),
+  bowl3: new Audio('bowl3.mp3'),
+  bowl4: new Audio('bowl4.mp3')
+};
+Object.values(bowlAudioPool).forEach(a => { a.preload = 'auto'; });
+
+// Unlock audio on first user interaction (critical for iOS/Android)
+let audioUnlocked = false;
+function unlockAudio() {
+  if (audioUnlocked) return;
+  try {
+    // Create a silent audio context to unlock audio on iOS/Android
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const buf = ctx.createBuffer(1, 1, 22050);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(ctx.destination);
+    src.start(0);
+    // Preload all audio files
+    Object.values(bowlAudioPool).forEach(a => { a.load(); });
+    natureAudio.load();
+  } catch(e) {}
+  audioUnlocked = true;
+}
+
+function getSelectedBowl(type) {
+  const checked = document.querySelector(`input[name="${type}"]:checked`);
+  return checked ? checked.value : 'bowl1';
+}
+
+function stopAllBowls() {
+  Object.values(bowlAudioPool).forEach(a => {
+    a.pause();
+    a.currentTime = 0;
+  });
+  const indicator = document.getElementById('bowlIndicator');
+  if (indicator) indicator.classList.remove('active');
+}
+
+function playBowlSound(type, cutoffSeconds, fadeOutSeconds) {
+  stopAllBowls();
+  const selected = getSelectedBowl(type);
+  const audio = bowlAudioPool[selected];
+  audio.currentTime = 0;
+  audio.volume = 1.0;
+  audio.play().catch(e => console.log('Audio play blocked:', e));
+
+  const indicator = document.getElementById('bowlIndicator');
+  if (indicator) indicator.classList.add('active');
+
+  const dur = cutoffSeconds || bowlDurations[selected] || 15;
+  setTimeout(() => {
+    if (indicator) indicator.classList.remove('active');
+    if (cutoffSeconds) {
+      // Fade out over fadeOutMs
+      const fadeMs = (fadeOutSeconds || 0) * 1000;
+      if (fadeMs > 0) {
+        const steps = 20;
+        const stepTime = fadeMs / steps;
+        const volStep = audio.volume / steps;
+        let count = 0;
+        const fade = setInterval(() => {
+          count++;
+          audio.volume = Math.max(0, audio.volume - volStep);
+          if (count >= steps) {
+            clearInterval(fade);
+            audio.pause();
+            audio.currentTime = 0;
+          }
+        }, stepTime);
+      } else {
+        audio.volume = 0;
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    }
+  }, dur * 1000);
+}
+
+function playStartBowl() { playBowlSound('startBowl'); }
+function playEndBowl() { playBowlSound('endBowl', 5, 3); } // 마무리종 5초 + 3초 페이드아웃
+
+function previewBowl(bowlKey) {
+  unlockAudio();
+  stopAllBowls();
+  const audio = bowlAudioPool[bowlKey];
+  audio.volume = 1.0;
+  audio.play().catch(e => console.log('Audio play blocked:', e));
+}
+
+
+// ========== SESSION STATE ==========
+const steps = [
+  {
+    latin: 'SILENTIO',
+    title: '침묵 — 준비 기도',
+    guide: '자세를 반듯하게 하고, 긴장을 풀고,\n부드럽게 심호흡 합니다.\n\n하나님의 이름을 부르며,\n내 안에 계시는 하나님을 주목합니다.',
+    showBible: false,
+    bowlAtStart: true,
+  },
+  {
+    latin: 'LECTIO',
+    title: '읽기 — 말씀을 천천히',
+    guide: '성경 본문을 2번 소리 내어 읽습니다.\n러브레터를 읽듯이 마음으로 읽습니다.\n\n마음에 와 닿는 한 구절을 찾아 봅니다.\n한 번 읽을 때마다 잠시 침묵하여 머무릅니다.',
+    showBible: true,
+    bowlAtStart: true,
+  },
+  {
+    latin: 'MEDITATIO',
+    title: '묵상 — 말씀을 되새기며',
+    guide: '마음에 와 닿은 구절을 천천히\n부드럽게 반복해서 되뇌입니다.\n\n그 구절과 관련해서 떠오르는\n생각, 감정, 신체적 감각을 헤아려 보며,\n성령께서 깨닫게 해주시는 것을 받아들입니다.',
+    showBible: false,
+    bowlAtStart: true,
+  },
+  {
+    latin: 'ORATIO',
+    title: '기도 — 진실하게 응답하며',
+    guide: '묵상 중 깨닫고, 발견한대로\n진실하게 반응하며\n\n감사, 찬양 또는\n간구의 기도를 드립니다.',
+    showBible: false,
+    bowlAtStart: true,
+  },
+  {
+    latin: 'CONTEMPLATIO',
+    title: '관상 — 하나님 안에서 쉬며',
+    guide: '내 안에 계시는 하나님의 현존에\n의식을 향하고,\n\n하나님 안에서 쉬는\n침묵 기도를 드립니다.',
+    showBible: false,
+    bowlAtStart: true,
+  }
+];
+
+let timesMin = [1, 3, 3, 3, 3]; // default times in minutes
+let currentStep = 0;
+let timerInterval = null;
+let remainingSeconds = 0;
+let totalSeconds = 0;
+let isPaused = false;
+let guideIndex = 0;
+let guideInterval = null;
+let bowlTimeout = null;
+let natureTimeout = null;
+let advanceTimeout = null;
+
+function adjustTime(stepIdx, delta) {
+  timesMin[stepIdx] = Math.max(0, Math.min(30, timesMin[stepIdx] + delta));
+  document.getElementById('time-' + stepIdx).textContent = timesMin[stepIdx];
+  saveSettings();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startSession() {
+  unlockAudio();
+  // Unlock nature audio specifically (must be in user gesture context)
+  natureAudio.volume = 0;
+  natureAudio.play().then(() => {
+    natureAudio.pause();
+    natureAudio.currentTime = 0;
+    natureAudio.volume = 0.3;
+  }).catch(() => { natureAudio.volume = 0.3; });
+  currentStep = 0;
+  showScreen('screen-session');
+  runStep(0);
+}
+
+function clearAllTimeouts() {
+  clearInterval(timerInterval);
+  clearInterval(guideInterval);
+  if (bowlTimeout) { clearTimeout(bowlTimeout); bowlTimeout = null; }
+  if (natureTimeout) { clearTimeout(natureTimeout); natureTimeout = null; }
+  if (advanceTimeout) { clearTimeout(advanceTimeout); advanceTimeout = null; }
+}
+
+function backToIntro() {
+  clearAllTimeouts();
+  clearCpTimeouts();
+  isPaused = false;
+  cpIsPaused = false;
+  stopNature();
+  stopAllBowls();
+  if (currentMode === 'centering') {
+    showScreen('screen-cp-intro');
+  } else {
+    showScreen('screen-intro');
+  }
+}
+
+function runStep(idx) {
+  clearAllTimeouts();
+  isPaused = false;
+  currentStep = idx;
+
+  // Skip steps with 0 minutes
+  if (timesMin[idx] === 0) {
+    if (idx < steps.length - 1) {
+      runStep(idx + 1);
+    } else {
+      showCompletion();
+    }
+    return;
+  }
+
+  const step = steps[idx];
+
+  // Update progress dots
+  const pb = document.getElementById('progressBar');
+  pb.innerHTML = steps.map((_, i) => {
+    let cls = 'progress-dot';
+    if (i < idx) cls += ' completed';
+    else if (i === idx) cls += ' current';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+
+  document.getElementById('stepLatin').textContent = step.latin;
+  document.getElementById('stepTitle').textContent = step.title;
+  document.getElementById('btnPause').textContent = '일시정지';
+
+  // Bible display
+  const bd = document.getElementById('bibleDisplay');
+  if (step.showBible) {
+    const ref = document.getElementById('bibleRef').value;
+    const txt = document.getElementById('bibleText').value;
+    if (ref || txt) {
+      bd.style.display = 'block';
+      document.getElementById('displayRef').textContent = ref || '';
+      document.getElementById('displayText').textContent = txt || '';
+    } else {
+      bd.style.display = 'none';
+    }
+  } else {
+    bd.style.display = 'none';
+  }
+
+  // Singing bowl at start (2초 지연) + nature sound 5초 후
+  stopNature();
+  if (step.bowlAtStart) {
+    bowlTimeout = setTimeout(() => {
+      playStartBowl();
+      natureTimeout = setTimeout(() => startNature(), 5000);
+    }, 2000);
+  } else {
+    natureTimeout = setTimeout(() => startNature(), 2000);
+  }
+
+  // Timer
+  totalSeconds = timesMin[idx] * 60;
+  remainingSeconds = totalSeconds;
+  updateTimerDisplay();
+  startTimer();
+
+  // Guide text — show all at once
+  showGuideText(step.guide);
+
+  // Update next button
+  const btnNext = document.getElementById('btnNext');
+  if (idx === steps.length - 1) {
+    btnNext.textContent = '마침 →';
+  } else {
+    btnNext.textContent = '다음 단계 →';
+  }
+}
+
+function showGuideText(text) {
+  const el = document.getElementById('guideText');
+  el.style.opacity = '0';
+  setTimeout(() => {
+    el.textContent = text;
+    el.style.opacity = '1';
+    el.style.transition = 'opacity 0.8s ease';
+  }, 300);
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    if (!isPaused) {
+      remainingSeconds--;
+      updateTimerDisplay();
+
+      // 2초 남았을 때 자연 소리 페이드아웃 시작
+      if (remainingSeconds === 2) {
+        fadeOutNature(1800);
+      }
+
+      if (remainingSeconds <= 0) {
+        clearInterval(timerInterval);
+        clearInterval(guideInterval);
+        playEndBowl(); // 마무리종 5초 + 3초 페이드아웃
+        advanceTimeout = setTimeout(() => {
+          stopAllBowls();
+          if (currentStep < steps.length - 1) {
+            nextStep();
+          } else {
+            showCompletion();
+          }
+        }, 8000);
+      }
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const mins = Math.floor(remainingSeconds / 60);
+  const secs = remainingSeconds % 60;
+  document.getElementById('timerDigits').textContent =
+    `${mins}:${secs.toString().padStart(2, '0')}`;
+
+  // Circle progress
+  const circumference = 2 * Math.PI * 88; // ~553
+  const progress = totalSeconds > 0 ? (totalSeconds - remainingSeconds) / totalSeconds : 0;
+  document.getElementById('timerProgress').style.strokeDashoffset =
+    circumference * (1 - progress);
+}
+
+function togglePause() {
+  isPaused = !isPaused;
+  document.getElementById('btnPause').textContent = isPaused ? '계속하기' : '일시정지';
+}
+
+function nextStep() {
+  clearAllTimeouts();
+  stopNature();
+  if (currentStep < steps.length - 1) {
+    runStep(currentStep + 1);
+  } else {
+    showCompletion();
+  }
+}
+
+function showCompletion() {
+  clearAllTimeouts();
+  stopNature();
+  stopAllBowls();
+  showScreen('screen-complete');
+}
+
+// ========== FIREFLIES ==========
+function createFireflies() {
+  const bg = document.querySelector('.forest-bg');
+  for (let i = 0; i < 12; i++) {
+    const ff = document.createElement('div');
+    ff.className = 'firefly';
+    ff.style.left = Math.random() * 100 + '%';
+    ff.style.top = (20 + Math.random() * 60) + '%';
+    ff.style.animationDelay = (Math.random() * 8) + 's';
+    ff.style.animationDuration = (6 + Math.random() * 6) + 's';
+    bg.appendChild(ff);
+  }
+}
+
+createFireflies();
+
+// ========== MODE SWITCHING ==========
+let currentMode = 'lectio'; // 'lectio' or 'centering'
+
+function switchMode(mode) {
+  currentMode = mode;
+  // Update tabs
+  document.getElementById('tab-lectio').classList.toggle('active', mode === 'lectio');
+  document.getElementById('tab-centering').classList.toggle('active', mode === 'centering');
+  // Update header title
+  const title = document.getElementById('headerTitle');
+  if (mode === 'lectio') {
+    title.innerHTML = '렉시오 디비나<em>LECTIO DIVINA</em>';
+    showScreen('screen-intro');
+  } else {
+    title.innerHTML = '센터링 프레이어<em>CENTERING PRAYER</em>';
+    showScreen('screen-cp-intro');
+  }
+  // Stop all sounds
+  clearAllTimeouts();
+  stopNature();
+  stopAllBowls();
+}
+
+// ========== CENTERING PRAYER ==========
+let cpTimeMin = 20;
+let cpTimerInterval = null;
+let cpRemainingSeconds = 0;
+let cpTotalSeconds = 0;
+let cpIsPaused = false;
+let cpBowlTimeout = null;
+let cpNatureTimeout = null;
+let cpAdvanceTimeout = null;
+
+function adjustCpTime(delta) {
+  cpTimeMin = Math.max(1, Math.min(60, cpTimeMin + delta));
+  document.getElementById('cp-time').textContent = cpTimeMin;
+  saveSettings();
+}
+
+function getCpBowl(type) {
+  const checked = document.querySelector(`input[name="${type}"]:checked`);
+  return checked ? checked.value : 'bowl2';
+}
+
+function playCpBowlSound(type, cutoffSeconds, fadeOutSeconds) {
+  stopAllBowls();
+  const selected = getCpBowl(type);
+  const audio = bowlAudioPool[selected];
+  audio.currentTime = 0;
+  audio.volume = 1.0;
+  audio.play().catch(() => {});
+
+  const indicator = document.getElementById('cpBowlIndicator');
+  if (indicator) indicator.classList.add('active');
+  const dur = cutoffSeconds || bowlDurations[selected] || 15;
+  setTimeout(() => {
+    if (indicator) indicator.classList.remove('active');
+    if (cutoffSeconds) {
+      const fadeMs = (fadeOutSeconds || 0) * 1000;
+      if (fadeMs > 0) {
+        const steps = 20;
+        const stepTime = fadeMs / steps;
+        const volStep = audio.volume / steps;
+        let count = 0;
+        const fade = setInterval(() => {
+          count++;
+          audio.volume = Math.max(0, audio.volume - volStep);
+          if (count >= steps) { clearInterval(fade); audio.pause(); audio.currentTime = 0; }
+        }, stepTime);
+      } else { audio.volume = 0; audio.pause(); audio.currentTime = 0; }
+    }
+  }, dur * 1000);
+}
+
+function playCpStartBowl() { playCpBowlSound('cpStartBowl'); }
+function playCpEndBowl() { playCpBowlSound('cpEndBowl'); } // 마무리종 끝까지 울림
+
+function isCpNatureEnabled() {
+  const toggle = document.getElementById('cpNatureToggle');
+  return toggle && toggle.checked;
+}
+
+function startCpNature() {
+  if (!isCpNatureEnabled()) return;
+  natureAudio.currentTime = 0;
+  natureAudio.volume = 0.3;
+  natureAudio.play().catch(() => {});
+}
+
+function clearCpTimeouts() {
+  clearInterval(cpTimerInterval);
+  if (cpBowlTimeout) { clearTimeout(cpBowlTimeout); cpBowlTimeout = null; }
+  if (cpNatureTimeout) { clearTimeout(cpNatureTimeout); cpNatureTimeout = null; }
+  if (cpAdvanceTimeout) { clearTimeout(cpAdvanceTimeout); cpAdvanceTimeout = null; }
+}
+
+function startCentering() {
+  unlockAudio();
+  natureAudio.volume = 0;
+  natureAudio.play().then(() => { natureAudio.pause(); natureAudio.currentTime = 0; natureAudio.volume = 0.3; }).catch(() => { natureAudio.volume = 0.3; });
+
+  showScreen('screen-cp-session');
+
+  cpTotalSeconds = cpTimeMin * 60;
+  cpRemainingSeconds = cpTotalSeconds;
+  cpIsPaused = false;
+  document.getElementById('cpBtnPause').textContent = '일시정지';
+  updateCpTimerDisplay();
+
+  // Start bowl after 2 sec, nature 5 sec after bowl
+  cpBowlTimeout = setTimeout(() => {
+    playCpStartBowl();
+    cpNatureTimeout = setTimeout(() => startCpNature(), 5000);
+  }, 2000);
+
+  // Start timer
+  cpTimerInterval = setInterval(() => {
+    if (!cpIsPaused) {
+      cpRemainingSeconds--;
+      updateCpTimerDisplay();
+      if (cpRemainingSeconds === 2) {
+        fadeOutNature(1800);
+      }
+      if (cpRemainingSeconds <= 0) {
+        clearInterval(cpTimerInterval);
+        playCpEndBowl();
+        const cpEndDur = bowlDurations[getCpBowl('cpEndBowl')] || 15;
+        cpAdvanceTimeout = setTimeout(() => {
+          stopAllBowls();
+          showScreen('screen-cp-complete');
+        }, (cpEndDur + 2) * 1000);
+      }
+    }
+  }, 1000);
+}
+
+function updateCpTimerDisplay() {
+  const mins = Math.floor(cpRemainingSeconds / 60);
+  const secs = cpRemainingSeconds % 60;
+  document.getElementById('cpTimerDigits').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+  const circumference = 2 * Math.PI * 88;
+  const progress = cpTotalSeconds > 0 ? (cpTotalSeconds - cpRemainingSeconds) / cpTotalSeconds : 0;
+  document.getElementById('cpTimerProgress').style.strokeDashoffset = circumference * (1 - progress);
+}
+
+function toggleCpPause() {
+  cpIsPaused = !cpIsPaused;
+  document.getElementById('cpBtnPause').textContent = cpIsPaused ? '계속하기' : '일시정지';
+}
+
+// ========== SETTINGS SAVE/LOAD ==========
+function saveSettings() {
+  try {
+    const settings = {
+      timesMin: timesMin,
+      startBowl: getSelectedBowl('startBowl'),
+      endBowl: getSelectedBowl('endBowl'),
+      natureOn: document.getElementById('natureToggle').checked,
+      cpTimeMin: cpTimeMin,
+      cpStartBowl: getCpBowl('cpStartBowl'),
+      cpEndBowl: getCpBowl('cpEndBowl'),
+      cpNatureOn: document.getElementById('cpNatureToggle').checked
+    };
+    localStorage.setItem('lectio-settings', JSON.stringify(settings));
+  } catch(e) {}
+}
+
+function loadSettings() {
+  try {
+    const raw = localStorage.getItem('lectio-settings');
+    if (!raw) return;
+    const s = JSON.parse(raw);
+
+    // Lectio settings
+    if (s.timesMin && Array.isArray(s.timesMin)) {
+      for (let i = 0; i < s.timesMin.length && i < timesMin.length; i++) {
+        timesMin[i] = s.timesMin[i];
+      }
+    }
+    if (s.startBowl) {
+      const el = document.querySelector(`input[name="startBowl"][value="${s.startBowl}"]`);
+      if (el) el.checked = true;
+    }
+    if (s.endBowl) {
+      const el = document.querySelector(`input[name="endBowl"][value="${s.endBowl}"]`);
+      if (el) el.checked = true;
+    }
+    if (typeof s.natureOn === 'boolean') {
+      document.getElementById('natureToggle').checked = s.natureOn;
+    }
+
+    // Centering prayer settings
+    if (s.cpTimeMin) {
+      cpTimeMin = s.cpTimeMin;
+      document.getElementById('cp-time').textContent = cpTimeMin;
+    }
+    if (s.cpStartBowl) {
+      const el = document.querySelector(`input[name="cpStartBowl"][value="${s.cpStartBowl}"]`);
+      if (el) el.checked = true;
+    }
+    if (s.cpEndBowl) {
+      const el = document.querySelector(`input[name="cpEndBowl"][value="${s.cpEndBowl}"]`);
+      if (el) el.checked = true;
+    }
+    if (typeof s.cpNatureOn === 'boolean') {
+      document.getElementById('cpNatureToggle').checked = s.cpNatureOn;
+    }
+  } catch(e) {}
+}
+
+// ========== INIT ==========
+// Load saved settings first
+loadSettings();
+
+// Set time display
+timesMin.forEach((t, i) => {
+  document.getElementById('time-' + i).textContent = t;
+});
+
+// Auto-save when any setting changes
+document.querySelectorAll('input[name="startBowl"], input[name="endBowl"], input[name="cpStartBowl"], input[name="cpEndBowl"]').forEach(el => {
+  el.addEventListener('change', saveSettings);
+});
+document.getElementById('natureToggle').addEventListener('change', saveSettings);
+document.getElementById('cpNatureToggle').addEventListener('change', saveSettings);
+
+// ========== PWA: SERVICE WORKER (inline) ==========
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE_NAME = 'lectio-v16';
+    const ASSETS = [self.location.href];
+
+    self.addEventListener('install', e => {
+      e.waitUntil(
+        caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
+      );
+      self.skipWaiting();
+    });
+
+    self.addEventListener('activate', e => {
+      e.waitUntil(
+        caches.keys().then(keys =>
+          Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+        )
+      );
+      self.clients.claim();
+    });
+
+    self.addEventListener('fetch', e => {
+      e.respondWith(
+        caches.match(e.request).then(cached => {
+          return cached || fetch(e.request).then(resp => {
+            if (resp.ok) {
+              const clone = resp.clone();
+              caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
+            }
+            return resp;
+          }).catch(() => cached);
+        })
+      );
+    });
+  `;
+
+  const swBlob = new Blob([swCode], { type: 'application/javascript' });
+  const swUrl = URL.createObjectURL(swBlob);
+
+  navigator.serviceWorker.register(swUrl, { scope: '.' })
+    .then(reg => console.log('SW registered:', reg.scope))
+    .catch(err => console.log('SW registration skipped:', err));
+}
+
+// ========== PWA: INSTALL PROMPT ==========
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  showInstallBanner();
+});
+
+function showInstallBanner() {
+  // Don't show if already installed
+  if (window.matchMedia('(display-mode: standalone)').matches) return;
+  if (navigator.standalone === true) return;
+
+  const banner = document.createElement('div');
+  banner.id = 'install-banner';
+  banner.innerHTML = `
+    <style>
+      #install-banner {
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        background: rgba(26, 46, 26, 0.97);
+        backdrop-filter: blur(10px);
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        z-index: 9999;
+        animation: slideUp 0.4s ease;
+        border-top: 1px solid rgba(168, 197, 160, 0.2);
+      }
+      #install-banner .ib-text {
+        color: #d4e4cf;
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 0.85rem;
+        line-height: 1.4;
+      }
+      #install-banner .ib-text strong {
+        color: #f5f0e8;
+        display: block;
+        font-size: 0.9rem;
+        margin-bottom: 2px;
+      }
+      #install-banner .ib-btns {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+      #install-banner .ib-install {
+        padding: 8px 18px;
+        background: linear-gradient(135deg, #3d6b3d, #5a8f5a);
+        color: #f5f0e8;
+        border: none;
+        border-radius: 8px;
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      #install-banner .ib-close {
+        padding: 8px 12px;
+        background: transparent;
+        color: #8a8a7a;
+        border: 1px solid rgba(168, 197, 160, 0.3);
+        border-radius: 8px;
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 0.8rem;
+        cursor: pointer;
+      }
+      @keyframes slideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+    </style>
+    <div class="ib-text">
+      <strong>🌿 홈 화면에 추가</strong>
+      앱처럼 바로 열 수 있어요
+    </div>
+    <div class="ib-btns">
+      <button class="ib-close" onclick="this.closest('#install-banner').remove()">닫기</button>
+      <button class="ib-install" id="ib-install-btn">설치</button>
+    </div>
+  `;
+  document.body.appendChild(banner);
+
+  document.getElementById('ib-install-btn').addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const result = await deferredPrompt.userChoice;
+      if (result.outcome === 'accepted') {
+        banner.remove();
+      }
+      deferredPrompt = null;
+    }
+  });
+}
+
+// For iOS: show instruction if not in standalone and no install prompt
+window.addEventListener('load', () => {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+
+  if (isIOS && !isStandalone) {
+    setTimeout(() => {
+      // Only show if no native install prompt was shown
+      if (!deferredPrompt && !document.getElementById('install-banner')) {
+        const tip = document.createElement('div');
+        tip.id = 'install-banner';
+        tip.innerHTML = `
+          <style>
+            #install-banner {
+              position: fixed;
+              bottom: 0; left: 0; right: 0;
+              background: rgba(26, 46, 26, 0.97);
+              backdrop-filter: blur(10px);
+              padding: 16px 20px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 12px;
+              z-index: 9999;
+              animation: slideUp 0.4s ease;
+              border-top: 1px solid rgba(168, 197, 160, 0.2);
+            }
+            #install-banner .ib-text {
+              color: #d4e4cf;
+              font-family: 'Noto Sans KR', sans-serif;
+              font-size: 0.85rem;
+              line-height: 1.5;
+            }
+            #install-banner .ib-text strong {
+              color: #f5f0e8;
+              display: block;
+              font-size: 0.9rem;
+              margin-bottom: 2px;
+            }
+            #install-banner .ib-close {
+              padding: 8px 12px;
+              background: transparent;
+              color: #8a8a7a;
+              border: 1px solid rgba(168, 197, 160, 0.3);
+              border-radius: 8px;
+              font-family: 'Noto Sans KR', sans-serif;
+              font-size: 0.8rem;
+              cursor: pointer;
+              flex-shrink: 0;
+            }
+            @keyframes slideUp {
+              from { transform: translateY(100%); }
+              to { transform: translateY(0); }
+            }
+          </style>
+          <div class="ib-text">
+            <strong>🌿 홈 화면에 추가하기</strong>
+            Safari 하단 공유 버튼(⎙) → "홈 화면에 추가"를 누르세요
+          </div>
+          <button class="ib-close" onclick="this.closest('#install-banner').remove()">확인</button>
+        `;
+        document.body.appendChild(tip);
+      }
+    }, 3000);
+  }
+});
+
+// ========== WAKE LOCK (화면 꺼짐 방지) ==========
+let wakeLock = null;
+
+async function requestWakeLock() {
+  try {
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    }
+  } catch (e) { /* ignore */ }
+}
+
+function releaseWakeLock() {
+  if (wakeLock) { wakeLock.release(); wakeLock = null; }
+}
+
+// Request wake lock when session starts, release when done
+const origStartSession = startSession;
+startSession = function() {
+  requestWakeLock();
+  origStartSession();
+};
+
+const origBackToIntro = backToIntro;
+backToIntro = function() {
+  releaseWakeLock();
+  origBackToIntro();
+};
+
+const origShowCompletion = showCompletion;
+showCompletion = function() {
+  releaseWakeLock();
+  origShowCompletion();
+};
+</script>
+</body>
+</html>
