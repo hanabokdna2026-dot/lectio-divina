@@ -316,9 +316,9 @@ body {
 }
 
 .bible-ref-input {
-  width: 100%;
+  flex: 1;
   padding: 12px 16px;
-  border: 1.5px solid var(--forest-mist);
+  border: 1.5px solid var(--gold-soft);
   border-radius: var(--radius-sm);
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 0.95rem;
@@ -329,15 +329,40 @@ body {
 }
 
 .bible-ref-input:focus {
-  border-color: var(--forest-mid);
+  border-color: var(--gold);
+}
+
+.direct-search-toggle {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--bark);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.direct-search-toggle:hover {
+  color: var(--gold);
+}
+
+.direct-search-box {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, margin-top 0.3s ease;
+  margin-top: 0;
+}
+
+.direct-search-box.open {
+  max-height: 80px;
+  margin-top: 10px;
 }
 
 .btn-bible-search {
-  padding: 0 16px;
-  border: 1.5px solid var(--forest-mid);
+  padding: 0 18px;
+  border: none;
   border-radius: var(--radius-sm);
-  background: var(--forest-mid);
-  color: var(--cream);
+  background: linear-gradient(135deg, var(--gold), var(--bark));
+  color: white;
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 0.85rem;
   font-weight: 500;
@@ -1158,6 +1183,16 @@ body {
           </button>
         </div>
 
+        <div class="direct-search-toggle" onclick="toggleDirectSearch()">
+          <span id="directSearchArrow">▸</span> 직접 입력해서 검색하기
+        </div>
+        <div class="direct-search-box" id="directSearchBox">
+          <div style="display:flex; gap:8px; align-items:stretch;">
+            <input type="text" class="bible-ref-input" id="bibleRefInput" placeholder="예: 시편 23:1-6" onkeydown="if(event.key==='Enter'){searchFromInput();}" />
+            <button type="button" class="btn-bible-search" onclick="searchFromInput()">검색</button>
+          </div>
+        </div>
+
         <div id="bibleSearchStatus" style="font-size:0.8rem; color:var(--text-light); margin-top:8px; min-height:1.2em;"></div>
         <textarea class="bible-text-input" id="bibleText" placeholder="위에서 책·장·절을 선택하면 본문이 표시됩니다. 직접 붙여넣어도 됩니다."></textarea>
         <input type="hidden" id="bibleRef" />
@@ -1740,6 +1775,34 @@ function syncPickerFromRef(refStr) {
   document.getElementById('pickVerseStart').disabled = false;
   document.getElementById('pickVerseEnd').disabled = false;
   updatePickerButtons();
+}
+
+// ========== DIRECT TEXT SEARCH (legacy input) ==========
+function toggleDirectSearch() {
+  const box = document.getElementById('directSearchBox');
+  const arrow = document.getElementById('directSearchArrow');
+  box.classList.toggle('open');
+  const isOpen = box.classList.contains('open');
+  arrow.textContent = isOpen ? '▾' : '▸';
+  try { localStorage.setItem('lectio-directSearch', isOpen ? '1' : '0'); } catch(e) {}
+}
+
+function restoreDirectSearch() {
+  try {
+    if (localStorage.getItem('lectio-directSearch') === '1') {
+      document.getElementById('directSearchBox').classList.add('open');
+      document.getElementById('directSearchArrow').textContent = '▾';
+    }
+  } catch(e) {}
+}
+
+function searchFromInput() {
+  const val = document.getElementById('bibleRefInput').value.trim();
+  if (!val) return;
+  document.getElementById('bibleRef').value = val;
+  // Sync picker buttons to match the typed reference
+  syncPickerFromRef(val);
+  searchBible();
 }
 
 // ========== BIBLE SEARCH ==========
@@ -2481,6 +2544,7 @@ function loadSettings() {
 // ========== INIT ==========
 // Load saved settings first
 loadSettings();
+restoreDirectSearch();
 
 // Set time display
 timesMin.forEach((t, i) => {
@@ -2497,7 +2561,7 @@ document.getElementById('cpNatureToggle').addEventListener('change', saveSetting
 // ========== PWA: SERVICE WORKER (inline) ==========
 if ('serviceWorker' in navigator) {
   const swCode = `
-    const CACHE_NAME = 'lectio-v16';
+    const CACHE_NAME = 'lectio-v18';
     const ASSETS = [self.location.href];
 
     self.addEventListener('install', e => {
